@@ -13,4 +13,11 @@ module.exports = [
         valor: 5500,
         tipo: "receita",
     },
+    {
+        id: 3,
+        descrição: "Mercado",
+        valor: 50,
+        tipo: "despesa",
+
+    }
 ]

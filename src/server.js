@@ -10,6 +10,9 @@ api.use(
     origin: "*"
 })
 );
+
+api.use(express.json());
+
 //GET - POST - PUT - DELETE 
 api.get("/info", (request, response) => {
     response.json({
@@ -25,12 +28,44 @@ api.get("/contas", (request, response) => {
 // :id = request params
 api.get("/conta/:id", (request, response) => {
     let contaId = Number(request.params.id);
-    let contaEncontrada = contas.find((conta) => conta.id == contaId);
+    let contaEncontrada = contas.find((conta) => conta.id === contaId);
+
+    if(!contaEncontrada) {
+        return response.status(404).json({mensagem: "Conta não encontrada." })
+    }
+
     console.log(contaEncontrada);
+    return response.json(contaEncontrada);
 });
 
-// api.listen(3000, () => {
-//     console.log(`Servidor rodadndo na porta 3000 em : http://localhost:3000`);
-// });
+// POST
+// body params
+api.post("/conta", (request, response) => {
+    let novaConta = request.body 
+    const novoId = contas.length + 1;
+    novaConta = {
+        id: novoId,
+        ...novaConta,
+    };   
+    contas.push (novaConta);
+    return response.json({mensagem: "Conta cadastrada com sucesso"})
+})
 
+api.put("/conta/:id", (request, response) => {
+    const contaId = Number(request.params.id);
+
+    const indexContaEncontrada = contas.findIndex(
+        (conta) => conta.id === contaId
+    );
+
+    if(indexContaEncontrada === -1) {
+        return response.status(404).json({mensagem: "Conta não encontrada." })
+    }
+
+    let novaConta = request.body; 
+
+    contas[indexContaEncontrada] = {...novaConta};
+
+    response.json({ mensage: "Conta alterada com sucesso"});    
+    });
 module.exports = api;
