@@ -3,6 +3,12 @@
 const express = require("express");
 const cors = require("cors");
 const api = express();
+const db = require("./db").connect();
+
+db.then(() => {console.log("Banco de dados conectado com sucesso...")
+}).catch((error) => {
+    console.error(error);
+});
 
 api.use(
     cors({

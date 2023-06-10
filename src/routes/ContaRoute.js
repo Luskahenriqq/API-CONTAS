@@ -5,8 +5,8 @@ const router = express.Router();
 let contas = require("../contasdb");
 const contaService = require('../services/ContaService')
 
-router.get("", (request, response) => {
-    const contas = contaService.listarTodasContas();
+router.get("", async (request, response) => {
+    const contas = await contaService.listarTodasContas();
     response.json(contas);
 });
 
@@ -30,15 +30,10 @@ router.get("/:id", async (request, response) => {
 
 // POST
 // body params
-router.post("", (request, response) => {
-    let novaConta = request.body
-    const novoId = contas.length + 1;
-    novaConta = {
-        id: novoId,
-        ...novaConta,
-    };
-    contas.push(novaConta);
-    return response.json({ mensagem: "Conta cadastrada com sucesso" })
+router.post("", async (request, response) => {
+    const resposta = await contaService.incluirConta(request.body) 
+    return response.json(resposta)
+    // return response.json( await contaService.incluirConta(request.body))
 })
 
 router.put("/:id", (request, response) => {
