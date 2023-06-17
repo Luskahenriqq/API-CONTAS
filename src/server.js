@@ -28,9 +28,16 @@ api.get("/info", (request, response) => {
 
 // ROTAS DA APILCAÇÃO -inicio
 
-// rotas de Conta
+// rotas de conta
 const contaRoute = require('./routes/ContaRoute');
-api.use('/conta', contaRoute);
+api.use("/conta", contaRoute);
+
+// rotas de usuarios
+const usuarioRoute = require("./routes/UsuarioRoute");
+api.use("/usuario", usuarioRoute)
+
+const loginRoute = require("./routes/LoginRoute")
+api.use("/login", loginRoute)
 // ROTAS DA APLICÃO - fim
 
 module.exports = api;

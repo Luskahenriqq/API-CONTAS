@@ -13,8 +13,8 @@ router.get("", async (request, response) => {
 router.get("/:id", async (request, response) => {
     try {
         const contaPesquisada = await contaService.buscarPeloId(request.params.id)
-        
-        if (contaPesquisada.mensagem){
+
+        if (contaPesquisada.mensagem) {
             throw contaPesquisada.mensagem;
         }
 
@@ -23,7 +23,7 @@ router.get("/:id", async (request, response) => {
         return response.status(404).json({
             message: 'Aconteceu um erro: ' + error,
             sucess: false,
-            status:404,
+            status: 404,
         });
     }
 });
@@ -31,27 +31,17 @@ router.get("/:id", async (request, response) => {
 // POST
 // body params
 router.post("", async (request, response) => {
-    const resposta = await contaService.incluirConta(request.body) 
+    const resposta = await contaService.incluirConta(request.body)
     return response.json(resposta)
     // return response.json( await contaService.incluirConta(request.body))
 })
 
-router.put("/:id", (request, response) => {
-    const contaId = Number(request.params.id);
-
-    const indexContaEncontrada = contas.findIndex(
-        (conta) => conta.id === contaId
+router.put("/:id", async (request, response) => {
+    const resposta = await contaService.editarConta(
+        request.params.id, request.body
     );
-
-    if (indexContaEncontrada === -1) {
-        return response.status(404).json({ mensagem: "Conta não encontrada." })
-    }
-
-    let novaConta = request.body;
-
-    contas[indexContaEncontrada] = { ...novaConta };
-
-    response.json({ mensage: "Conta alterada com sucesso" });
+    return response.json(resposta);
 });
+
 
 module.exports = router;
