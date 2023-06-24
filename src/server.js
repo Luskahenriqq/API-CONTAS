@@ -2,8 +2,14 @@
 
 const express = require("express");
 const cors = require("cors");
+const usuarioRoute = require("./routes/UsuarioRoute");
+const contaRoute = require('./routes/ContaRoute');
+const loginRoute = require("./routes/LoginRoute");
+
 const api = express();
 const db = require("./db").connect();
+const middlewareLog = require("./middlewares/log") 
+const { verificarToken } = require("./middlewares/autenticacaoMiddleware");
 
 db.then(() => {console.log("Banco de dados conectado com sucesso...")
 }).catch((error) => {
@@ -29,14 +35,11 @@ api.get("/info", (request, response) => {
 // ROTAS DA APILCAÇÃO -inicio
 
 // rotas de conta
-const contaRoute = require('./routes/ContaRoute');
-api.use("/conta", contaRoute);
+api.use("/conta", verificarToken , middlewareLog.log, contaRoute);
 
 // rotas de usuarios
-const usuarioRoute = require("./routes/UsuarioRoute");
 api.use("/usuario", usuarioRoute)
 
-const loginRoute = require("./routes/LoginRoute")
 api.use("/login", loginRoute)
 // ROTAS DA APLICÃO - fim
 

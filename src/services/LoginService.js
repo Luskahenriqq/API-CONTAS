@@ -1,7 +1,8 @@
 'use strict'
 
 const bcrypt = require ("bcrypt");
-const usuarioModel = require("../models/UsuarioModel")
+const usuarioModel = require("../models/UsuarioModel");
+const { gerarToken } = require("../utils/TokenUtil");
 
 module.exports = {
     autenticar: async (usuario) => {
@@ -31,7 +32,12 @@ module.exports = {
              };
             }
 
-            return usuarioEncontrado;
+            const token = gerarToken(JSON.stringify(usuarioEncontrado));
+
+            return {
+                message: "login realizado com sucesso.",
+                token,
+            } 
         } catch (error) {
             return {
                 mensagem: error,
